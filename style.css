@@ -1,3 +1,5 @@
+/* Jom Kira v4.1 — polished UI + alignment fix + end screen card */
+
 /* layout vertical, kemas & responsive */
 :root{
   --card-w: 480px;
@@ -88,7 +90,7 @@ html,body{height:100%; margin:0; font-family: Inter, "Segoe UI", Arial, sans-ser
   padding: 18px;
   position: relative;
   overflow: visible;
-  padding-bottom: 140px;     /* reserve for controls */
+  padding-bottom: 220px;     /* reserve for controls */
   border: 4px solid #a3d8ff;
 }
 
@@ -100,48 +102,61 @@ html,body{height:100%; margin:0; font-family: Inter, "Segoe UI", Arial, sans-ser
   text-align:center;
 }
 
-/* score & question number */
+/* stats (skor + soalan) */
+.stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+  gap: 12px;
+}
 .score-display {
-  text-align: center;
   font-size: 1.05rem;
   font-weight: 700;
   color: #0288d1;
-  margin-bottom: 6px;
 }
 .q-number {
-  text-align: center;
   font-size: 0.98rem;
   color: #0b76ff;
   font-weight:700;
-  margin-bottom: 8px;
 }
 
 /* vertical problem (right aligned like buku kira) */
-.problem-vertical{
+.problem-vertical {
   text-align: right;
-  width: 200px;
-  margin: 6px auto 8px auto;
-  line-height: 1;
+  width: 220px;
+  margin: 30px auto 8px auto; /* naikkan jarak atas (asal 6px → 30px) */
+  line-height: 1.1;
   font-family: "Courier New", monospace;
-  font-size: clamp(28px, 6vw, 46px);
-  font-weight:700;
+  font-size: clamp(36px, 7vw, 56px);
+  font-weight: 800;
   position: relative;
   z-index: 1;
+  padding-right: 12px;
+  letter-spacing: 20px; /* jika kau nak jarak antara digit */
 }
 
-.problem-vertical .row{
-  display:flex;
-  justify-content:flex-end;
-  align-items:flex-end;
-  gap: 8px;
+.problem-vertical .row.bottom {
+  display: flex;
+  justify-content: space-between; /* operator kiri, nombor kanan */
+  align-items: flex-end;
 }
 
-.problem-vertical #operator{
-  display:inline-block;
-  margin-right: 6px;
-  font-size: 32px;
-  line-height:1;
+.problem-vertical .row.top {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+
+/* operator alignment fix: fixed width so it sits neatly beside num2 */
+.problem-vertical #operator {
+  margin-left: 8px;      /* jarak kecil dari tepi kiri */
+  margin-right: 0;
+  font-size: 44px;
+  line-height: 1;
   vertical-align: bottom;
+  text-align: left;
+  width: auto;
 }
 
 /* dividing lines */
@@ -150,14 +165,14 @@ html,body{height:100%; margin:0; font-family: Inter, "Segoe UI", Arial, sans-ser
   height: 3px;
   background: #000;
   margin-top: 8px;
-  margin-bottom: 30px;
+  margin-bottom: 150px;
 }
 .answer-line {
   width: 100%;
   height: 3px;
   background: #000;
-  margin-top: 10px;
-  margin-bottom: 8px;
+  margin-top: 18px;
+  margin-bottom: 1px;
 }
 
 /* controls and answers above canvas */
@@ -165,10 +180,14 @@ html,body{height:100%; margin:0; font-family: Inter, "Segoe UI", Arial, sans-ser
   margin-top: 14px;
   display:flex;
   gap:16px;
-  justify-content:center;
+  justify-content: center;
   align-items:center;
   z-index: 30;
-  position: relative;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 40px;             /* pinned to bottom of card inside reserved area */
+  padding: 0 12px;
 }
 
 /* ikon butang */
@@ -177,25 +196,21 @@ html,body{height:100%; margin:0; font-family: Inter, "Segoe UI", Arial, sans-ser
   border: 2px solid #039be5;
   color: #00334e;
   box-shadow: 0 3px 0 #0288d1;
-  transition: transform 0.15s;
+  transition: transform 0.12s;
   border-radius: 50%;
-  width: 52px;
-  height: 52px;
-  font-size: 1.5rem;
+  width: 56px;
+  height: 56px;
+  font-size: 1.6rem;
   font-weight: bold;
   cursor: pointer;
-  margin: 0 4px; /* <— tambah sikit jarak */
+  margin: 0 8px;
 }
 
-
-.icon-btn:hover {
-  transform: rotate(20deg) scale(1.1);
-}
-
+.icon-btn:hover { transform: translateY(-4px) scale(1.03); }
 
 /* answers row */
 .answers{
-  margin-top:14px;
+  margin-top:100px;
   display:flex;
   gap:10px;
   justify-content: center;
@@ -205,49 +220,16 @@ html,body{height:100%; margin:0; font-family: Inter, "Segoe UI", Arial, sans-ser
 }
 
 .answers button{
-  background:#e6f0ff;
-  border:none;
-  padding:8px 12px;
-  border-radius:10px;
-  cursor:pointer;
-  font-weight:700;
-  min-width:72px;
-}
-
-/* feedback */
-.feedback{
-  margin-top:10px;
-  min-height:28px;
-  text-align:center;
-  font-weight:700;
-  z-index: 20;
-  position: relative;
-}
-
-/* canvas covers card area BUT stops above control area */
-canvas#drawCanvas{
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 140px;            /* reserve same space */
-  z-index: 3;
-  background: transparent;
-  touch-action: none;
-  cursor: crosshair;
-  display: block;
-}
-
-/* ---------------- COLOR OVERLAY (small styling polish) ---------------- */
-body {
-  background: linear-gradient(180deg, #b3e5fc 0%, #e1f5fe 100%);
-}
-
-.answers button {
   background: linear-gradient(145deg, #fff176, #fdd835);
   border: 2px solid #fbc02d;
   box-shadow: 0 3px 0 #f9a825;
-  transition: transform 0.15s;
+  padding: 10px 16px;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:800;
+  min-width:88px;
+  font-size: 1.05rem;
+  transition: transform 0.1s, box-shadow 0.1s;
 }
 
 .answers button:hover {
@@ -255,26 +237,48 @@ body {
   background: linear-gradient(145deg, #ffee58, #fff59d);
 }
 
-.controls button,
-.controls select {
-  background: linear-gradient(145deg, #81d4fa, #4fc3f7);
-  border: 2px solid #039be5;
-  color: #00334e;
-  box-shadow: 0 3px 0 #0288d1;
-  transition: transform 0.15s;
+.answers button:active {
+  transform: scale(0.98);
+  box-shadow: 0 1px 0 #c68a00;
 }
 
-.controls button:hover,
-.controls select:hover {
-  transform: translateY(-3px);
+/* feedback */
+.feedback{
+  margin-top:100px;
+  min-height:28px;
+  text-align:center;
+  font-weight:700;
+  z-index: 20;
+  position: relative;
 }
 
-.feedback {
-  font-size: 1.1rem;
-  font-weight: bold;
-  color: #0288d1;
-  text-shadow: 1px 1px 2px #fff;
+canvas#drawCanvas{
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 220px;            /* reserve same space */
+  z-index: 3;
+  background: transparent;
+  touch-action: none;
+  cursor: crosshair;
+  display: block;
 }
+
+/* end-screen card inside feedback */
+.end-screen {
+  background: linear-gradient(145deg,#e3f2fd,#bbdefb);
+  border-radius: 12px;
+  padding: 12px;
+  border: 2px solid #64b5f6;
+  display: inline-block;
+  text-align: center;
+}
+.end-screen h2 { margin: 0 0 8px; color: #0b76ff; }
+.end-screen p { margin: 4px 0; }
+
+/* feedback state colors */
+.feedback { font-size: 1.1rem; color: #0288d1; text-shadow: 1px 1px 2px #fff; }
 .feedback.correct { color: #43a047; }
 .feedback.wrong { color: #e53935; }
 

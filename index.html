@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Jom Kira! v3.5</title>
+  <title>Jom Kira! v4.1</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -44,10 +44,14 @@
     <div id="quizScreen" class="screen">
       <div class="card">
         <h1>Jom Kira!</h1>
-        <div id="scoreDisplay" class="score-display">Skor: 0</div>
-        <div id="qNumber" class="q-number">Soalan: 0 / 0</div>
 
-        <div class="problem-vertical" id="problemBlock">
+        <!-- stats bar -->
+        <div class="stats" aria-hidden="false">
+          <div id="scoreDisplay" class="score-display">Skor: 0</div>
+          <div id="qNumber" class="q-number">Soalan: 0 / 0</div>
+        </div>
+
+        <div class="problem-vertical" id="problemBlock" role="group" aria-label="Soalan">
           <div class="row top" id="num1">48</div>
           <div class="row bottom">
             <span id="operator">+</span>
@@ -58,19 +62,19 @@
         </div>
 
         <!-- Lukisan -->
-        <canvas id="drawCanvas"></canvas>
+        <canvas id="drawCanvas" aria-label="Lukisan jawapan"></canvas>
 
         <!-- Jawapan -->
-        <div class="answers" id="answers"></div>
+        <div class="answers" id="answers" aria-live="polite"></div>
 
         <!-- Kawalan (padam + refresh) -->
-        <div class="controls">
+        <div class="controls" role="toolbar" aria-label="Kawalan utama">
           <button id="homeBtn" title="Balik ke Menu 🏠" class="icon-btn">🏠</button>
-  	  <button id="newBtn" title="Soalan Baru 🔄" class="icon-btn">🔄</button>
-  	  <button id="clearBtn" title="Padam Lukisan 🧽" class="icon-btn">🧽</button>
+          <button id="newBtn" title="Soalan Baru 🔄" class="icon-btn">🔄</button>
+          <button id="clearBtn" title="Padam Lukisan 🧽" class="icon-btn">🧽</button>
         </div>
 
-        <div id="feedback" class="feedback"></div>
+        <div id="feedback" class="feedback" aria-live="assertive"></div>
       </div>
     </div>
 

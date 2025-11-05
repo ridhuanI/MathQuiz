@@ -1,4 +1,4 @@
-// 🎯 Jom Kira v3.8 — Stable release (refresh fix + auto home + clean UI)
+// 🎯 Jom Kira v4.1 — polished UI + alignment fix + end screen card
 
 // Elements
 const canvas = document.getElementById('drawCanvas');
@@ -21,7 +21,6 @@ const startBtn = document.getElementById('startBtn');
 const homeOpSelect = document.getElementById('homeOpSelect');
 const homeCountSelect = document.getElementById('homeCountSelect');
 const homeBtn = document.getElementById('homeBtn');
-
 
 // Variables
 let currentOp = "mix";
@@ -46,15 +45,35 @@ function resizeCanvas(){
   canvas.style.height = height + 'px';
   canvas.width = Math.round(width * dpr);
   canvas.height = Math.round(height * dpr);
+  // map drawing to CSS pixels (so drawing uses logical CSS px)
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   ctx.lineJoin = 'round';
   ctx.lineCap = 'round';
+  drawGuideLine();
 }
 window.addEventListener('resize', () => {
   if (ctx.resetTransform) ctx.resetTransform();
   resizeCanvas();
 });
 resizeCanvas();
+
+// draw faint horizontal guides (like exercise book)
+function drawGuideLine(){
+  // clear then draw faint lines
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.save();
+  ctx.strokeStyle = 'rgba(0,0,0,0.04)';
+  ctx.lineWidth = 1;
+  // draw every 20px (CSS px coordinates because of setTransform)
+  const cssHeight = canvas.height / (window.devicePixelRatio || 1);
+  for (let y = 18; y < cssHeight; y += 20) {
+    ctx.beginPath();
+    ctx.moveTo(6, y);
+    ctx.lineTo((canvas.width / (window.devicePixelRatio || 1)) - 6, y);
+    ctx.stroke();
+  }
+  ctx.restore();
+}
 
 // ================================================================
 // Drawing logic
@@ -85,7 +104,7 @@ canvas.addEventListener('pointerup', (e) => {
 canvas.addEventListener('pointercancel', () => { isDrawing = false; });
 
 clearBtn.addEventListener('click', () => {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  drawGuideLine();
   feedbackEl.textContent = '';
 });
 
@@ -119,22 +138,25 @@ function buildChoices(correct){
 // ================================================================
 // Jawapan logic
 function checkAnswer(selected, btn){
+  // elak klik selepas tamat
+  if (questionCount > maxQuestions) return;
+
+  Array.from(answersEl.children).forEach(b => b.disabled = true);
+
   if (selected === currentAnswer){
     btn.style.background = '#b2f2bb';
-    btn.disabled = true;
     feedbackEl.textContent = 'Betul! 🎉';
     feedbackEl.className = 'feedback correct';
     score++;
     scoreDisplay.textContent = `Skor: ${score}`;
-    Array.from(answersEl.children).forEach(b => b.disabled = true);
-
-    setTimeout(()=> generateQuestion(currentOp), 800);
   } else {
     btn.style.background = '#ff8a8a';
-    btn.disabled = true;
-    feedbackEl.textContent = 'Salah — cuba lagi!';
+    feedbackEl.textContent = 'Salah ❌';
     feedbackEl.className = 'feedback wrong';
   }
+
+  // teruskan ke soalan seterusnya selepas 1 saat
+  setTimeout(() => generateQuestion(currentOp), 1000);
 }
 
 // ================================================================
@@ -142,22 +164,31 @@ function checkAnswer(selected, btn){
 function generateQuestion(mode = 'mix', isRefresh = false) {
   // Tamat permainan
   if (questionCount >= maxQuestions && !isRefresh) {
-    feedbackEl.className = 'feedback';
-    feedbackEl.innerHTML = `
-      🎯 Tamat!<br>Skor anda: <strong>${score}/${maxQuestions}</strong><br><br>
-      ${score === maxQuestions ? '🌟 Excellent Job!' : score > maxQuestions * 0.6 ? '👍 Good Job!' : '💪 Keep Practicing!'}<br><br>
-      Tekan <strong>🏠</strong> untuk balik ke menu utama.
-    `;
-    answersEl.innerHTML = '';
-    newBtn.textContent = "🔄";
-    return; // ❗ Berhenti sini — tunggu user tekan Home sendiri
-  }
+  feedbackEl.className = 'feedback';
+  feedbackEl.innerHTML = `
+    <div class="end-screen" role="status">
+      <h2>🎯 Tamat!</h2>
+      <p>Skor anda: <strong>${score}/${maxQuestions}</strong></p>
+      <p>${score === maxQuestions ? '🌟 Excellent Job!' : score > maxQuestions * 0.6 ? '👍 Good Job!' : '💪 Keep Practicing!'}</p>
+      <p class="hint">Tekan <strong>🏠</strong> untuk balik ke menu utama.</p>
+    </div>
+  `;
+  answersEl.innerHTML = '';
+  newBtn.textContent = "🔄";
+
+  // 🚫 Hanya homeBtn kekal, sembunyi butang lain
+  newBtn.style.display = "none";
+  clearBtn.style.display = "none";
+  homeBtn.style.display = "inline-block";
+  return;
+}
+
 
   // Tambah bilangan soalan hanya bila bukan refresh manual
   if (!isRefresh) questionCount++;
 
   updateQuestionNumber();
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  drawGuideLine();
   feedbackEl.textContent = '';
 
   let op = mode;
@@ -182,7 +213,6 @@ function generateQuestion(mode = 'mix', isRefresh = false) {
   buildChoices(ans);
 }
 
-
 // ================================================================
 // Buttons
 newBtn.addEventListener('click', () => {
@@ -192,6 +222,7 @@ newBtn.addEventListener('click', () => {
     score = 0;
     scoreDisplay.textContent = `Skor: ${score}`;
     feedbackEl.textContent = '';
+    newBtn.textContent = "🔄";
     generateQuestion(currentOp);
   } else {
     // Kalau belum tamat, refresh current question tanpa tambah count
@@ -211,12 +242,28 @@ startBtn.addEventListener('click', () => {
   quizScreen.classList.add('active');
   resizeCanvas();
   generateQuestion(currentOp);
+  // pastikan semua butang muncul semula
+  newBtn.style.display = "inline-block";
+  clearBtn.style.display = "inline-block";
+  homeBtn.style.display = "inline-block";
+
 });
 
 homeBtn.addEventListener('click', () => {
+  // Kalau dah habis semua soalan, terus balik ke home tanpa tanya
+  if (questionCount >= maxQuestions) {
+    questionCount = 0;
+    score = 0;
+    feedbackEl.textContent = '';
+    scoreDisplay.textContent = `Skor: 0`;
+    homeScreen.classList.add('active');
+    quizScreen.classList.remove('active');
+    return;
+  }
+
+  // Kalau belum habis, baru tanya confirm
   const confirmExit = confirm("Betul nak balik ke menu utama? Progres akan hilang.");
   if (confirmExit) {
-    // Reset semua data & balik ke home
     questionCount = 0;
     score = 0;
     feedbackEl.textContent = '';
@@ -225,7 +272,6 @@ homeBtn.addEventListener('click', () => {
     quizScreen.classList.remove('active');
   }
 });
-
 
 // ================================================================
 updateQuestionNumber();
