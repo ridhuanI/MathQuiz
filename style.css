@@ -1,0 +1,224 @@
+/* layout vertical, kemas untuk telefon & desktop */
+:root{
+  --card-w: 480px;
+  --bg: #eef8ff;
+  --card-bg: #fff;
+  --accent: #0b76ff;
+}
+
+*{box-sizing: border-box;}
+html,body{height:100%; margin:0; font-family: Inter, "Segoe UI", Arial, sans-serif; background:var(--bg);}
+
+.quiz-container{
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+/* card: reserve space bottom for controls/answers */
+.card{
+  width: min(var(--card-w), 95%);
+  background: var(--card-bg);
+  border-radius: 14px;
+  box-shadow: 0 8px 28px rgba(6,24,44,0.08);
+  padding: 18px;
+  position: relative;
+  overflow: visible;         /* supaya controls boleh berada di luar jika perlu */
+  padding-bottom: 140px;     /* <-- RESERVE space for controls/answers */
+}
+
+
+/* Title */
+.card h1{
+  margin:0 0 10px 0;
+  font-size:1.2rem;
+  color: var(--accent);
+  text-align:center;
+}
+
+.score-display {
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #0288d1;
+  margin-bottom: 10px;
+}
+
+/* vertical problem (right aligned like buku kira) */
+.problem-vertical{
+  text-align: right;
+  width: 160px;
+  margin: 6px auto 8px auto;
+  line-height: 1;
+  font-family: "Courier New", monospace;
+  font-size: 44px;
+  font-weight:700;
+  position: relative; /* numbers are beneath canvas */
+  z-index: 1;
+}
+
+.problem-vertical .row{
+  display:flex;
+  justify-content:flex-end;
+  align-items:flex-end; /* keep operator baseline aligned */
+  gap: 8px;
+}
+
+.problem-vertical #operator{
+  display:inline-block;
+  margin-right: 6px;
+  font-size: 32px;
+  line-height:1;
+  vertical-align: bottom;
+}
+
+/* strong dividing line */
+.line{
+  width: 100%;
+  height: 3px;
+  background: #000;
+  margin-top: 8px;
+  margin-bottom: 40px;
+}
+.answer-line {
+  width: 100%;
+  height: 3px;
+  background: #000;
+  margin-top: 10px;    /* jarak dari line pertama */
+  margin-bottom: 1px; /* jarak bawah sebelum butang */
+}
+/* controls and answers should be above canvas (z-index higher) */
+.controls{
+  margin-top: 12px;
+  display:flex;
+  gap:8px;
+  justify-content:center;
+  align-items:center;
+  z-index: 30;              /* ensure above canvas */
+  position: relative;
+}
+
+.controls select,
+.controls button{
+  margin-top:15px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #e6eefc;
+  background: white;
+  cursor: pointer;
+  font-weight:600;
+}
+
+/* answers row */
+.answers{
+  margin-top:14px;
+  display:flex;
+  gap:10px;
+  justify-content: center;
+  z-index: 30;              /* ensure above canvas */
+  position: relative;
+}
+
+.answers button{
+  background:#e6f0ff;
+  border:none;
+  padding:8px 12px;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:700;
+}
+
+/* feedback */
+.feedback{
+  margin-top:10px;
+  min-height:24px;
+  text-align:center;
+  font-weight:700;
+  z-index: 20;
+  position: relative;
+}
+
+/* canvas covers card area BUT stops above control area */
+canvas#drawCanvas{
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 140px;            /* <-- reserve same space as padding-bottom */
+  z-index: 3;               /* under controls but above numbers */
+  background: transparent;
+  touch-action: none;
+  cursor: crosshair;
+  display: block;
+}
+
+
+/* 🌟 Warna & gaya ceria (tanpa ubah layout asal) */
+body {
+  background: linear-gradient(180deg, #b3e5fc 0%, #e1f5fe 100%);
+}
+
+.card {
+  border: 4px solid #a3d8ff;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+  background: #ffffff;
+}
+
+.card h1 {
+  font-size: 1.5rem;
+  color: #0288d1;
+  text-shadow: 1px 1px 2px #fff;
+  letter-spacing: 1px;
+}
+
+/* garisan warna hitam kekal tapi lebih tebal sikit */
+.line, .answer-line {
+  background: #000;
+  border-radius: 2px;
+}
+
+/* butang jawapan */
+.answers button {
+  background: linear-gradient(145deg, #fff176, #fdd835);
+  border: 2px solid #fbc02d;
+  box-shadow: 0 3px 0 #f9a825;
+  transition: transform 0.15s;
+}
+
+.answers button:hover {
+  transform: translateY(-3px);
+  background: linear-gradient(145deg, #ffee58, #fff59d);
+}
+
+/* kawalan */
+.controls button,
+.controls select {
+  background: linear-gradient(145deg, #81d4fa, #4fc3f7);
+  border: 2px solid #039be5;
+  color: #00334e;
+  box-shadow: 0 3px 0 #0288d1;
+  transition: transform 0.15s;
+}
+
+.controls button:hover,
+.controls select:hover {
+  transform: translateY(-3px);
+}
+
+/* maklum balas */
+.feedback {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #0288d1;
+  text-shadow: 1px 1px 2px #fff;
+}
+
+.feedback.correct {
+  color: #43a047;
+}
+
+.feedback.wrong {
+  color: #e53935;
+}

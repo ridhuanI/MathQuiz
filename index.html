@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Jom Kira! (Vertical)</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="quiz-container">
+    <div class="card">
+      <h1>Jom Kira!</h1>
+      <div id="scoreDisplay" class="score-display">Skor: 0</div>
+      <div class="problem-vertical" id="problemBlock">
+        <div class="row top" id="num1">48</div>
+        <div class="row bottom">
+          <span id="operator">+</span>
+          <span id="num2">21</span>
+        </div>
+        <div class="line"></div>
+        <div class="answer-line"></div>
+      </div>
+
+      <div class="controls">
+        <select id="opSelect">
+          <option value="mix">Campur</option>
+          <option value="+">Tambah (+)</option>
+          <option value="-">Tolak (−)</option>
+          <option value="×">Darab (×)</option>
+          <option value="÷">Bahagi (÷)</option>
+        </select>
+
+	<select id="questionCountSelect">
+  	  <option value="5">5 Soalan</option>
+  	  <option value="10" selected>10 Soalan</option>
+  	  <option value="15">15 Soalan</option>
+  	  <option value="20">20 Soalan</option>
+	</select>
+
+
+        <button id="newBtn">Soalan Baru</button>
+        <button id="clearBtn">Padam Lukisan</button>
+      </div>
+
+      <div class="answers" id="answers"></div>
+      <div id="feedback" class="feedback"></div>
+
+      <!-- canvas berada di dalam .card, atas nombor tapi di bawah controls (controls z-index tinggi) -->
+      <canvas id="drawCanvas" aria-label="Lukisan" ></canvas>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
