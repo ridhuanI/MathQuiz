@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Pilih Bilangan Soalan</title>
+</head>
+
+<body>
+
+<h2>Pilih Berapa Soalan</h2>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const op = params.get("op");
+</script>
+
+<div style="margin-top:20px;">
+    <button onclick="location.href='quiz_start.html?op=' + op + '&q=5'">5 Soalan</button>
+    <button onclick="location.href='quiz_start.html?op=' + op + '&q=10'">10 Soalan</button>
+    <button onclick="location.href='quiz_start.html?op=' + op + '&q=20'">20 Soalan</button>
+</div>
+
+<br>
+<button onclick="location.href='quiz_menu.html'">Balik</button>
+
+</body>
+</html>

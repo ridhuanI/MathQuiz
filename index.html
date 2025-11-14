@@ -1,85 +1,60 @@
 <!DOCTYPE html>
 <html lang="ms">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Jom Kira! v4.1</title>
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&display=swap" rel="stylesheet">
+<title>Permainan Matematik</title>
+
+<link rel="stylesheet" href="style.css">
+<style>
+  body {
+    font-family: Comic Sans MS;
+    background: #fffaf0;
+    text-align: center;
+    padding-top: 60px;
+  }
+
+  h1 {
+    color: #ff6600;
+    margin-bottom: 40px;
+  }
+
+  .menu-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  a {
+    display: inline-block;
+    text-decoration: none;
+    font-size: 26px;
+    background: #ffd966;
+    color: #333;
+    padding: 15px 40px;
+    border-radius: 12px;
+    box-shadow: 0 3px 5px rgba(0,0,0,0.2);
+    transition: transform 0.15s, background 0.3s;
+  }
+
+  a:hover {
+    transform: scale(1.05);
+    background: #ffeb99;
+  }
+</style>
 </head>
 <body>
-  <div class="quiz-container">
 
-    <!-- 🏠 HOME SCREEN -->
-    <div id="homeScreen" class="screen active">
-      <div class="home-card">
-        <h1 class="home-title">Jom Kira!</h1>
-        <p class="home-sub">Pilih operasi dan jumlah soalan:</p>
+<h1>🧮 Permainan Matematik Interaktif</h1>
 
-        <div class="home-controls">
-          <label for="homeOpSelect">Operasi</label>
-          <select id="homeOpSelect">
-            <option value="mix">Campur (Rawak)</option>
-            <option value="+">Tambah (+)</option>
-            <option value="-">Tolak (−)</option>
-            <option value="×">Darab (×)</option>
-            <option value="÷">Bahagi (÷)</option>
-          </select>
+<div class="menu-container">
+  <a href="addition.html">➕ Tambah</a>
+  <a href="subtraction.html">➖ Tolak</a>
+  <a href="quiz_menu.html">Quiz</a>
 
-          <label for="homeCountSelect">Jumlah Soalan</label>
-          <select id="homeCountSelect">
-            <option value="5">5 Soalan</option>
-            <option value="10" selected>10 Soalan</option>
-            <option value="15">15 Soalan</option>
-            <option value="20">20 Soalan</option>
-          </select>
+</div>
 
-          <button id="startBtn" class="primary">Mula!</button>
-        </div>
-
-        <div class="home-footer">Seronok & mudah — sesuai untuk budak sekolah rendah 🎒</div>
-      </div>
-    </div>
-
-    <!-- 🎯 GAME SCREEN -->
-    <div id="quizScreen" class="screen">
-      <div class="card">
-        <h1>Jom Kira!</h1>
-
-        <!-- stats bar -->
-        <div class="stats" aria-hidden="false">
-          <div id="scoreDisplay" class="score-display">Skor: 0</div>
-          <div id="qNumber" class="q-number">Soalan: 0 / 0</div>
-        </div>
-
-        <div class="problem-vertical" id="problemBlock" role="group" aria-label="Soalan">
-          <div class="row top" id="num1">48</div>
-          <div class="row bottom">
-            <span id="operator">+</span>
-            <span id="num2">21</span>
-          </div>
-          <div class="line"></div>
-          <div class="answer-line"></div>
-        </div>
-
-        <!-- Lukisan -->
-        <canvas id="drawCanvas" aria-label="Lukisan jawapan"></canvas>
-
-        <!-- Jawapan -->
-        <div class="answers" id="answers" aria-live="polite"></div>
-
-        <!-- Kawalan (padam + refresh) -->
-        <div class="controls" role="toolbar" aria-label="Kawalan utama">
-          <button id="homeBtn" title="Balik ke Menu 🏠" class="icon-btn">🏠</button>
-          <button id="newBtn" title="Soalan Baru 🔄" class="icon-btn">🔄</button>
-          <button id="clearBtn" title="Padam Lukisan 🧽" class="icon-btn">🧽</button>
-        </div>
-
-        <div id="feedback" class="feedback" aria-live="assertive"></div>
-      </div>
-    </div>
-
-  </div>
-
-  <script src="script.js"></script>
 </body>
 </html>

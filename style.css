@@ -1,290 +1,208 @@
-/* Jom Kira v4.1 — polished UI + alignment fix + end screen card */
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&display=swap');
 
-/* layout vertical, kemas & responsive */
-:root{
-  --card-w: 480px;
-  --bg: #eef8ff;
-  --card-bg: #fff;
-  --accent: #0b76ff;
-}
-
-/* reset */
-*{box-sizing: border-box;}
-html,body{height:100%; margin:0; font-family: Inter, "Segoe UI", Arial, sans-serif; background:var(--bg);}
-
-.quiz-container{
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
-}
-
-/* ---------------- HOME SCREEN ---------------- */
-.screen { display: none; width: 100%; text-align: center; }
-.screen.active { display: block; }
-
-.home-card {
-  width: min(420px, 95%);
-  margin: 0 auto;
-  background: linear-gradient(180deg, #ffffff, #f7fbff);
-  border-radius: 16px;
-  padding: 22px;
-  box-shadow: 0 10px 30px rgba(6,24,44,0.08);
-  border: 4px solid #a3d8ff;
-}
-
-.home-title {
-  margin: 0 0 6px 0;
-  color: var(--accent);
-  font-size: 1.7rem;
-}
-
-.home-sub {
-  margin: 0 0 14px 0;
-  color: #226f9f;
-  font-weight:600;
-}
-
-.home-controls {
-  display:flex;
-  flex-direction: column;
-  gap: 12px;
-  align-items: stretch;
-  margin-top: 6px;
-}
-
-.home-controls select {
-  padding: 10px;
-  border-radius: 10px;
-  border: 2px solid #d8eefc;
-  font-weight:700;
-}
-
-.primary {
-  padding: 12px;
-  border-radius: 12px;
-  background: linear-gradient(145deg,#4fc3f7,#2b90d9);
-  color: white;
-  border: none;
-  font-weight: 800;
-  font-size: 1.05rem;
-  cursor: pointer;
-  box-shadow: 0 6px 0 #2b90d9;
-}
-
-/* small footer */
-.home-footer {
-  margin-top: 12px;
-  color: #0b76ff;
-  font-weight: 600;
-}
-
-/* ---------------- QUIZ CARD ---------------- */
-/* card: reserve space bottom for controls/answers */
-.card{
-  width: min(var(--card-w), 95%);
-  background: var(--card-bg);
-  border-radius: 14px;
-  box-shadow: 0 8px 28px rgba(6,24,44,0.08);
-  padding: 18px;
-  position: relative;
-  overflow: visible;
-  padding-bottom: 220px;     /* reserve for controls */
-  border: 4px solid #a3d8ff;
-}
-
-/* Title */
-.card h1{
-  margin:0 0 6px 0;
-  font-size:1.3rem;
-  color: var(--accent);
-  text-align:center;
-}
-
-/* stats (skor + soalan) */
-.stats {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 6px;
-  gap: 12px;
-}
-.score-display {
-  font-size: 1.05rem;
-  font-weight: 700;
-  color: #0288d1;
-}
-.q-number {
-  font-size: 0.98rem;
-  color: #0b76ff;
-  font-weight:700;
-}
-
-/* vertical problem (right aligned like buku kira) */
-.problem-vertical {
-  text-align: right;
-  width: 220px;
-  margin: 30px auto 8px auto; /* naikkan jarak atas (asal 6px → 30px) */
-  line-height: 1.1;
-  font-family: "Courier New", monospace;
-  font-size: clamp(36px, 7vw, 56px);
-  font-weight: 800;
-  position: relative;
-  z-index: 1;
-  padding-right: 12px;
-  letter-spacing: 20px; /* jika kau nak jarak antara digit */
-}
-
-.problem-vertical .row.bottom {
-  display: flex;
-  justify-content: space-between; /* operator kiri, nombor kanan */
-  align-items: flex-end;
-}
-
-.problem-vertical .row.top {
-  display: flex;
-  justify-content: flex-end;
-  align-items: flex-end;
-}
-
-/* operator alignment fix: fixed width so it sits neatly beside num2 */
-.problem-vertical #operator {
-  margin-left: 8px;      /* jarak kecil dari tepi kiri */
-  margin-right: 0;
-  font-size: 44px;
-  line-height: 1;
-  vertical-align: bottom;
-  text-align: left;
-  width: auto;
-}
-
-/* dividing lines */
-.line{
-  width: 100%;
-  height: 3px;
-  background: #000;
-  margin-top: 8px;
-  margin-bottom: 150px;
-}
-.answer-line {
-  width: 100%;
-  height: 3px;
-  background: #000;
-  margin-top: 18px;
-  margin-bottom: 1px;
-}
-
-/* controls and answers above canvas */
-.controls{
-  margin-top: 14px;
-  display:flex;
-  gap:16px;
-  justify-content: center;
-  align-items:center;
-  z-index: 30;
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 40px;             /* pinned to bottom of card inside reserved area */
-  padding: 0 12px;
-}
-
-/* ikon butang */
-.icon-btn {
-  background: linear-gradient(145deg, #81d4fa, #4fc3f7);
-  border: 2px solid #039be5;
-  color: #00334e;
-  box-shadow: 0 3px 0 #0288d1;
-  transition: transform 0.12s;
-  border-radius: 50%;
-  width: 56px;
-  height: 56px;
-  font-size: 1.6rem;
-  font-weight: bold;
-  cursor: pointer;
-  margin: 0 8px;
-}
-
-.icon-btn:hover { transform: translateY(-4px) scale(1.03); }
-
-/* answers row */
-.answers{
-  margin-top:100px;
-  display:flex;
-  gap:10px;
-  justify-content: center;
-  z-index: 30;
-  position: relative;
-  flex-wrap: wrap;
-}
-
-.answers button{
-  background: linear-gradient(145deg, #fff176, #fdd835);
-  border: 2px solid #fbc02d;
-  box-shadow: 0 3px 0 #f9a825;
-  padding: 10px 16px;
-  border-radius:10px;
-  cursor:pointer;
-  font-weight:800;
-  min-width:88px;
-  font-size: 1.05rem;
-  transition: transform 0.1s, box-shadow 0.1s;
-}
-
-.answers button:hover {
-  transform: translateY(-3px);
-  background: linear-gradient(145deg, #ffee58, #fff59d);
-}
-
-.answers button:active {
-  transform: scale(0.98);
-  box-shadow: 0 1px 0 #c68a00;
-}
-
-/* feedback */
-.feedback{
-  margin-top:100px;
-  min-height:28px;
-  text-align:center;
-  font-weight:700;
-  z-index: 20;
-  position: relative;
-}
-
-canvas#drawCanvas{
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 220px;            /* reserve same space */
-  z-index: 3;
-  background: transparent;
-  touch-action: none;
-  cursor: crosshair;
-  display: block;
-}
-
-/* end-screen card inside feedback */
-.end-screen {
-  background: linear-gradient(145deg,#e3f2fd,#bbdefb);
-  border-radius: 12px;
-  padding: 12px;
-  border: 2px solid #64b5f6;
-  display: inline-block;
+body {
+  font-family: 'Baloo 2', sans-serif;
   text-align: center;
+  background: #fffaf0;
+  margin-top: 40px;
 }
-.end-screen h2 { margin: 0 0 8px; color: #0b76ff; }
-.end-screen p { margin: 4px 0; }
 
-/* feedback state colors */
-.feedback { font-size: 1.1rem; color: #0288d1; text-shadow: 1px 1px 2px #fff; }
-.feedback.correct { color: #43a047; }
-.feedback.wrong { color: #e53935; }
-
-/* responsive tweaks */
-@media (min-width: 768px) {
-  .card { max-width: 560px; padding-bottom: 140px; }
-  canvas#drawCanvas { bottom: 140px; }
-  .problem-vertical { width: 240px; }
+h2 {
+  color: #ff6600;
+  margin-bottom: 30px;
 }
+
+.page-title {
+    font-size: 30px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    color: #ff7a00;
+    font-weight: 700;
+    text-align: center;
+}
+
+/* Layout utama */
+.row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+
+/* Kotak nombor */
+.box {
+  border: 2px solid #333;
+  border-radius: 8px;
+  width: 70px;
+  height: 70px;
+  line-height: 70px;
+  font-size: 40px;
+  background: #fff;
+  user-select: none;
+  transition: background 0.3s, color 0.3s, transform 0.2s;
+  touch-action: none;
+}
+
+.box.dragging { opacity: 0.5; background: #ffe599; }
+
+.row-bawah {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  margin-bottom: 10px;
+}
+
+/* kumpulan khas untuk puluh + tanda tolak */
+.puluh-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+/* tanda tolak duduk atas kotak puluh, bukan tengah baris */
+.minus {
+  position: absolute;
+  left: calc(50% - 100px); /* kira separuh total dua kotak (70+70+10gap)/2 = ~75px, adjust + margin */
+  top: 50%;
+  transform: translate(-100%, -50%);
+  font-size: 50px;
+  font-weight: bold;
+  color: #000;
+  user-select: none;
+  pointer-events: none;
+}
+
+
+
+/* Warna khas */
+.red { color: red; font-weight: bold; }
+.green { color: green; font-weight: bold; }
+
+.preview {
+  background: #e3ffe3;
+  color: green;
+  transition: 0.2s ease;
+}
+
+.floating10 {
+  position: fixed;
+  pointer-events: none;
+  font-size: 26px;
+  font-weight: bold;
+  color: #ff6600;
+  opacity: 0.95;
+  transform: translate(-50%, -50%) scale(1.15);
+  -webkit-transform: translateZ(0); /* 💡 paksa GPU render di iOS */
+  transition: transform 0.05s linear, opacity 0.1s ease;
+  z-index: 9999;
+}
+
+.dropzone.previewing {
+  background: #e6ffe6;
+  border-color: #4CAF50;
+}
+
+.garis {
+  width: 220px;
+  height: 4px;
+  background: #333;
+  margin: 0 auto 10px;
+  border-radius: 2px;
+}
+
+/* Dropzone & nombor */
+.num {
+  border: 2px solid #aaa;
+  width: 50px;
+  height: 50px;
+  line-height: 50px;
+  font-size: 28px;
+  border-radius: 6px;
+  background: #fff;
+  cursor: grab;
+  touch-action: none;
+  transition: transform 0.2s;
+}
+.dragging { opacity: 0.7; transform: scale(1.1); }
+
+.dropzone {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px dashed #333;
+  width: 70px;
+  height: 70px;
+  font-size: 40px;
+  background: #fafafa;
+  border-radius: 8px;
+  color: #999;
+}
+
+.num-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  width: 320px;
+  margin: auto;
+}
+
+button {
+  font-size: 20px;
+  margin-top: 25px;
+  padding: 10px 25px;
+  border: none;
+  border-radius: 8px;
+  background: #ffd966;
+  cursor: pointer;
+}
+
+.back-link {
+  display: block;
+  margin-top: 25px;
+  font-size: 18px;
+  color: #555;
+  text-decoration: none;
+}
+
+#feedback {
+  margin-top: 20px;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+/* Responsif */
+@media (max-width: 480px) {
+  .minus {
+    font-size: 42px;
+    line-height: 55px;
+  }
+}
+
+
+.num {
+    width: 45px;
+    height: 45px;
+    font-size: 24px;
+}
+
+.garis {
+    width: 170px;
+}
+
+#numberPadWrapper {
+    margin-top: 20px;
+}
+
+#feedback {
+    display: none;
+    font-size: 26px;
+    font-weight: bold;
+    padding: 15px 0;
+}
+
